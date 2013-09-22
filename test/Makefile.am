@@ -1,9 +1,14 @@
-AM_LDFLAGS = -module -rpath $(libdir) -avoid-version -no-undefined
-AM_CPPFLAGS = $(CUTTER_CFLAGS)
-LIBS = $(CUTTER_LIBS) $(top_builddir)/src/libfilereader.la
-
-noinst_LTLIBRARIES = test_stdiotest.la
-test_stdiotest_la_SOURCES = test_stdiotest.cpp
-
 TESTS = run-test.sh
 TESTS_ENVIRONMENT = CUTTER="$(CUTTER)"
+EXTRA_DIST = TESTFILE TESTTABLE.TVS
+
+AM_LDFLAGS = -module -rpath $(libdir) -avoid-version -no-undefined
+AM_CPPFLAGS = $(CPPCUTTER_CFLAGS) -O0 -g
+LIBS = $(CPPCUTTER_LIBS) $(top_builddir)/src/libfilereader.la
+
+noinst_LTLIBRARIES = test_stdiotest.la test_table.la
+test_stdiotest_la_SOURCES = test_stdiotest.cpp
+test_table_la_SOURCES = test_table.cpp
+
+echo-cutter:
+	@echo $(CUTTER)

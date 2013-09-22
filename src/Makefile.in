@@ -124,7 +124,7 @@ am__uninstall_files_from_dir = { \
 am__installdirs = "$(DESTDIR)$(libdir)" "$(DESTDIR)$(bindir)"
 LTLIBRARIES = $(lib_LTLIBRARIES)
 libfilereader_la_LIBADD =
-am_libfilereader_la_OBJECTS = filereader.lo
+am_libfilereader_la_OBJECTS = filereader.lo tablereader.lo
 libfilereader_la_OBJECTS = $(am_libfilereader_la_OBJECTS)
 AM_V_lt = $(am__v_lt_@AM_V@)
 am__v_lt_ = $(am__v_lt_@AM_DEFAULT_V@)
@@ -208,6 +208,8 @@ CC = @CC@
 CCDEPMODE = @CCDEPMODE@
 CFLAGS = @CFLAGS@
 CPP = @CPP@
+CPPCUTTER_CFLAGS = @CPPCUTTER_CFLAGS@
+CPPCUTTER_LIBS = @CPPCUTTER_LIBS@
 CPPFLAGS = @CPPFLAGS@
 CUTTER = @CUTTER@
 CUTTER_CFLAGS = @CUTTER_CFLAGS@
@@ -325,7 +327,7 @@ AM_LDFLAGS = -no-undefined
 readfile_SOURCES = test.cpp
 readfile_LDADD = libfilereader.la
 lib_LTLIBRARIES = libfilereader.la
-libfilereader_la_SOURCES = filereader.cpp
+libfilereader_la_SOURCES = filereader.cpp tablereader.cpp
 all: config.h
 	$(MAKE) $(AM_MAKEFLAGS) all-am
 
@@ -475,6 +477,7 @@ distclean-compile:
 	-rm -f *.tab.c
 
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/filereader.Plo@am__quote@
+@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/tablereader.Plo@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/test.Po@am__quote@
 
 .cpp.o:

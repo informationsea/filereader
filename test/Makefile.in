@@ -101,6 +101,9 @@ AM_V_lt = $(am__v_lt_@AM_V@)
 am__v_lt_ = $(am__v_lt_@AM_DEFAULT_V@)
 am__v_lt_0 = --silent
 am__v_lt_1 = 
+test_table_la_LIBADD =
+am_test_table_la_OBJECTS = test_table.lo
+test_table_la_OBJECTS = $(am_test_table_la_OBJECTS)
 AM_V_P = $(am__v_P_@AM_V@)
 am__v_P_ = $(am__v_P_@AM_DEFAULT_V@)
 am__v_P_0 = false
@@ -135,8 +138,8 @@ AM_V_CXXLD = $(am__v_CXXLD_@AM_V@)
 am__v_CXXLD_ = $(am__v_CXXLD_@AM_DEFAULT_V@)
 am__v_CXXLD_0 = @echo "  CXXLD   " $@;
 am__v_CXXLD_1 = 
-SOURCES = $(test_stdiotest_la_SOURCES)
-DIST_SOURCES = $(test_stdiotest_la_SOURCES)
+SOURCES = $(test_stdiotest_la_SOURCES) $(test_table_la_SOURCES)
+DIST_SOURCES = $(test_stdiotest_la_SOURCES) $(test_table_la_SOURCES)
 am__can_run_installinfo = \
   case $$AM_UPDATE_INFO_DIR in \
     n|no|NO) false;; \
@@ -378,6 +381,8 @@ CC = @CC@
 CCDEPMODE = @CCDEPMODE@
 CFLAGS = @CFLAGS@
 CPP = @CPP@
+CPPCUTTER_CFLAGS = @CPPCUTTER_CFLAGS@
+CPPCUTTER_LIBS = @CPPCUTTER_LIBS@
 CPPFLAGS = @CPPFLAGS@
 CUTTER = @CUTTER@
 CUTTER_CFLAGS = @CUTTER_CFLAGS@
@@ -407,7 +412,7 @@ INSTALL_STRIP_PROGRAM = @INSTALL_STRIP_PROGRAM@
 LD = @LD@
 LDFLAGS = @LDFLAGS@
 LIBOBJS = @LIBOBJS@
-LIBS = $(CUTTER_LIBS) $(top_builddir)/src/libfilereader.la
+LIBS = $(CPPCUTTER_LIBS) $(top_builddir)/src/libfilereader.la
 LIBTOOL = @LIBTOOL@
 LIPO = @LIPO@
 LN_S = @LN_S@
@@ -491,12 +496,14 @@ target_alias = @target_alias@
 top_build_prefix = @top_build_prefix@
 top_builddir = @top_builddir@
 top_srcdir = @top_srcdir@
-AM_LDFLAGS = -module -rpath $(libdir) -avoid-version -no-undefined
-AM_CPPFLAGS = $(CUTTER_CFLAGS)
-noinst_LTLIBRARIES = test_stdiotest.la
-test_stdiotest_la_SOURCES = test_stdiotest.cpp
 TESTS = run-test.sh
 TESTS_ENVIRONMENT = CUTTER="$(CUTTER)"
+EXTRA_DIST = TESTFILE TESTTABLE.TVS
+AM_LDFLAGS = -module -rpath $(libdir) -avoid-version -no-undefined
+AM_CPPFLAGS = $(CPPCUTTER_CFLAGS) -O0 -g
+noinst_LTLIBRARIES = test_stdiotest.la test_table.la
+test_stdiotest_la_SOURCES = test_stdiotest.cpp
+test_table_la_SOURCES = test_table.cpp
 all: all-am
 
 .SUFFIXES:
@@ -546,6 +553,9 @@ clean-noinstLTLIBRARIES:
 test_stdiotest.la: $(test_stdiotest_la_OBJECTS) $(test_stdiotest_la_DEPENDENCIES) $(EXTRA_test_stdiotest_la_DEPENDENCIES) 
 	$(AM_V_CXXLD)$(CXXLINK)  $(test_stdiotest_la_OBJECTS) $(test_stdiotest_la_LIBADD) $(LIBS)
 
+test_table.la: $(test_table_la_OBJECTS) $(test_table_la_DEPENDENCIES) $(EXTRA_test_table_la_DEPENDENCIES) 
+	$(AM_V_CXXLD)$(CXXLINK)  $(test_table_la_OBJECTS) $(test_table_la_LIBADD) $(LIBS)
+
 mostlyclean-compile:
 	-rm -f *.$(OBJEXT)
 
@@ -553,6 +563,7 @@ distclean-compile:
 	-rm -f *.tab.c
 
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/test_stdiotest.Plo@am__quote@
+@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/test_table.Plo@am__quote@
 
 .cpp.o:
 @am__fastdepCXX_TRUE@	$(AM_V_CXX)$(CXXCOMPILE) -MT $@ -MD -MP -MF $(DEPDIR)/$*.Tpo -c -o $@ $<
@@ -951,6 +962,9 @@ uninstall-am:
 	mostlyclean-generic mostlyclean-libtool pdf pdf-am ps ps-am \
 	recheck tags tags-am uninstall uninstall-am
 
+
+echo-cutter:
+	@echo $(CUTTER)
 
 # Tell versions [3.59,3.63) of GNU make to not export all variables.
 # Otherwise a system limit (for SysV at least) may be exceeded.

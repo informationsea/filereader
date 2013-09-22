@@ -643,6 +643,8 @@ CXXDEPMODE
 ac_ct_CXX
 CXXFLAGS
 CXX
+CPPCUTTER_LIBS
+CPPCUTTER_CFLAGS
 CUTTER
 CUTTER_LIBS
 CUTTER_CFLAGS
@@ -789,6 +791,8 @@ PKG_CONFIG_PATH
 PKG_CONFIG_LIBDIR
 CUTTER_CFLAGS
 CUTTER_LIBS
+CPPCUTTER_CFLAGS
+CPPCUTTER_LIBS
 CXX
 CXXFLAGS
 CCC
@@ -1450,6 +1454,10 @@ Some influential environment variables:
   CUTTER_CFLAGS
               C compiler flags for CUTTER, overriding pkg-config
   CUTTER_LIBS linker flags for CUTTER, overriding pkg-config
+  CPPCUTTER_CFLAGS
+              C compiler flags for CPPCUTTER, overriding pkg-config
+  CPPCUTTER_LIBS
+              linker flags for CPPCUTTER, overriding pkg-config
   CXX         C++ compiler command
   CXXFLAGS    C++ compiler flags
   CXXCPP      C++ preprocessor
@@ -11981,6 +11989,7 @@ $as_echo "no" >&6; }
 fi
 
 
+
 # Check whether --with-cutter was given.
 if test "${with_cutter+set}" = set; then :
   withval=$with_cutter; cutter_with_value=$withval
@@ -12087,6 +12096,86 @@ fi
   fi
   ac_cv_use_cutter="$cutter_use_cutter" # for backward compatibility
 
+
+
+
+  if test "$cutter_use_cutter" = "no"; then
+    cutter_use_cppcutter=no
+  fi
+  if test "x$cutter_use_cppcutter" = "x"; then
+
+pkg_failed=no
+{ $as_echo "$as_me:${as_lineno-$LINENO}: checking for CPPCUTTER" >&5
+$as_echo_n "checking for CPPCUTTER... " >&6; }
+
+if test -n "$CPPCUTTER_CFLAGS"; then
+    pkg_cv_CPPCUTTER_CFLAGS="$CPPCUTTER_CFLAGS"
+ elif test -n "$PKG_CONFIG"; then
+    if test -n "$PKG_CONFIG" && \
+    { { $as_echo "$as_me:${as_lineno-$LINENO}: \$PKG_CONFIG --exists --print-errors \"cppcutter \""; } >&5
+  ($PKG_CONFIG --exists --print-errors "cppcutter ") 2>&5
+  ac_status=$?
+  $as_echo "$as_me:${as_lineno-$LINENO}: \$? = $ac_status" >&5
+  test $ac_status = 0; }; then
+  pkg_cv_CPPCUTTER_CFLAGS=`$PKG_CONFIG --cflags "cppcutter " 2>/dev/null`
+		      test "x$?" != "x0" && pkg_failed=yes
+else
+  pkg_failed=yes
+fi
+ else
+    pkg_failed=untried
+fi
+if test -n "$CPPCUTTER_LIBS"; then
+    pkg_cv_CPPCUTTER_LIBS="$CPPCUTTER_LIBS"
+ elif test -n "$PKG_CONFIG"; then
+    if test -n "$PKG_CONFIG" && \
+    { { $as_echo "$as_me:${as_lineno-$LINENO}: \$PKG_CONFIG --exists --print-errors \"cppcutter \""; } >&5
+  ($PKG_CONFIG --exists --print-errors "cppcutter ") 2>&5
+  ac_status=$?
+  $as_echo "$as_me:${as_lineno-$LINENO}: \$? = $ac_status" >&5
+  test $ac_status = 0; }; then
+  pkg_cv_CPPCUTTER_LIBS=`$PKG_CONFIG --libs "cppcutter " 2>/dev/null`
+		      test "x$?" != "x0" && pkg_failed=yes
+else
+  pkg_failed=yes
+fi
+ else
+    pkg_failed=untried
+fi
+
+
+
+if test $pkg_failed = yes; then
+   	{ $as_echo "$as_me:${as_lineno-$LINENO}: result: no" >&5
+$as_echo "no" >&6; }
+
+if $PKG_CONFIG --atleast-pkgconfig-version 0.20; then
+        _pkg_short_errors_supported=yes
+else
+        _pkg_short_errors_supported=no
+fi
+        if test $_pkg_short_errors_supported = yes; then
+	        CPPCUTTER_PKG_ERRORS=`$PKG_CONFIG --short-errors --print-errors --cflags --libs "cppcutter " 2>&1`
+        else
+	        CPPCUTTER_PKG_ERRORS=`$PKG_CONFIG --print-errors --cflags --libs "cppcutter " 2>&1`
+        fi
+	# Put the nasty error message in config.log where it belongs
+	echo "$CPPCUTTER_PKG_ERRORS" >&5
+
+	cutter_use_cppcutter=no
+elif test $pkg_failed = untried; then
+     	{ $as_echo "$as_me:${as_lineno-$LINENO}: result: no" >&5
+$as_echo "no" >&6; }
+	cutter_use_cppcutter=no
+else
+	CPPCUTTER_CFLAGS=$pkg_cv_CPPCUTTER_CFLAGS
+	CPPCUTTER_LIBS=$pkg_cv_CPPCUTTER_LIBS
+        { $as_echo "$as_me:${as_lineno-$LINENO}: result: yes" >&5
+$as_echo "yes" >&6; }
+	cutter_use_cppcutter=yes
+fi
+  fi
+  ac_cv_use_cppcutter="$cutter_use_cppcutter" # for backward compatibility
 
 
 
