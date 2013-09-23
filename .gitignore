@@ -32,6 +32,8 @@ stamp-h1
 /config.log
 /config.status
 *.tar.gz
+/autoscan.log
+/configure.scan
 
 /test/run-test.sh.log
 /test/run-test.sh.trs
