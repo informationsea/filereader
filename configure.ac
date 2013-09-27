@@ -43,7 +43,8 @@ AC_TYPE_SIZE_T
 AC_FUNC_FSEEKO
 AC_FUNC_MALLOC
 AC_FUNC_REALLOC
-AC_CHECK_FUNCS([strerror strtol])
+AC_FUNC_MMAP
+AC_CHECK_FUNCS([strerror strtol munmap])
 
 AC_CONFIG_FILES([Makefile src/Makefile test/Makefile])
 AC_OUTPUT

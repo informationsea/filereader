@@ -94,9 +94,9 @@ CONFIG_HEADER = $(top_builddir)/src/config.h
 CONFIG_CLEAN_FILES =
 CONFIG_CLEAN_VPATH_FILES =
 LTLIBRARIES = $(noinst_LTLIBRARIES)
-test_stdiotest_la_LIBADD =
-am_test_stdiotest_la_OBJECTS = test_stdiotest.lo
-test_stdiotest_la_OBJECTS = $(am_test_stdiotest_la_OBJECTS)
+test_filereader_la_LIBADD =
+am_test_filereader_la_OBJECTS = test_filereader.lo
+test_filereader_la_OBJECTS = $(am_test_filereader_la_OBJECTS)
 AM_V_lt = $(am__v_lt_@AM_V@)
 am__v_lt_ = $(am__v_lt_@AM_DEFAULT_V@)
 am__v_lt_0 = --silent
@@ -138,8 +138,8 @@ AM_V_CXXLD = $(am__v_CXXLD_@AM_V@)
 am__v_CXXLD_ = $(am__v_CXXLD_@AM_DEFAULT_V@)
 am__v_CXXLD_0 = @echo "  CXXLD   " $@;
 am__v_CXXLD_1 = 
-SOURCES = $(test_stdiotest_la_SOURCES) $(test_table_la_SOURCES)
-DIST_SOURCES = $(test_stdiotest_la_SOURCES) $(test_table_la_SOURCES)
+SOURCES = $(test_filereader_la_SOURCES) $(test_table_la_SOURCES)
+DIST_SOURCES = $(test_filereader_la_SOURCES) $(test_table_la_SOURCES)
 am__can_run_installinfo = \
   case $$AM_UPDATE_INFO_DIR in \
     n|no|NO) false;; \
@@ -501,8 +501,8 @@ TESTS_ENVIRONMENT = CUTTER="$(CUTTER)"
 EXTRA_DIST = TESTFILE TESTTABLE.TVS
 AM_LDFLAGS = -module -rpath $(libdir) -avoid-version -no-undefined
 AM_CPPFLAGS = $(CPPCUTTER_CFLAGS) -O0 -g
-noinst_LTLIBRARIES = test_stdiotest.la test_table.la
-test_stdiotest_la_SOURCES = test_stdiotest.cpp
+noinst_LTLIBRARIES = test_filereader.la test_table.la
+test_filereader_la_SOURCES = test_filereader.cpp
 test_table_la_SOURCES = test_table.cpp
 all: all-am
 
@@ -550,8 +550,8 @@ clean-noinstLTLIBRARIES:
 	  rm -f $${locs}; \
 	}
 
-test_stdiotest.la: $(test_stdiotest_la_OBJECTS) $(test_stdiotest_la_DEPENDENCIES) $(EXTRA_test_stdiotest_la_DEPENDENCIES) 
-	$(AM_V_CXXLD)$(CXXLINK)  $(test_stdiotest_la_OBJECTS) $(test_stdiotest_la_LIBADD) $(LIBS)
+test_filereader.la: $(test_filereader_la_OBJECTS) $(test_filereader_la_DEPENDENCIES) $(EXTRA_test_filereader_la_DEPENDENCIES) 
+	$(AM_V_CXXLD)$(CXXLINK)  $(test_filereader_la_OBJECTS) $(test_filereader_la_LIBADD) $(LIBS)
 
 test_table.la: $(test_table_la_OBJECTS) $(test_table_la_DEPENDENCIES) $(EXTRA_test_table_la_DEPENDENCIES) 
 	$(AM_V_CXXLD)$(CXXLINK)  $(test_table_la_OBJECTS) $(test_table_la_LIBADD) $(LIBS)
@@ -562,7 +562,7 @@ mostlyclean-compile:
 distclean-compile:
 	-rm -f *.tab.c
 
-@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/test_stdiotest.Plo@am__quote@
+@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/test_filereader.Plo@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/test_table.Plo@am__quote@
 
 .cpp.o:
