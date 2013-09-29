@@ -128,7 +128,8 @@ am__installdirs = "$(DESTDIR)$(libdir)" "$(DESTDIR)$(bindir)" \
 LTLIBRARIES = $(lib_LTLIBRARIES)
 libfilereader_la_LIBADD =
 am_libfilereader_la_OBJECTS = filereader.lo filereader_core.lo \
-	filereader_stdio.lo filereader_mmap.lo tablereader.lo
+	filereader_stdio.lo filereader_mmap.lo tablereader.lo \
+	csvreader.lo
 libfilereader_la_OBJECTS = $(am_libfilereader_la_OBJECTS)
 AM_V_lt = $(am__v_lt_@AM_V@)
 am__v_lt_ = $(am__v_lt_@AM_DEFAULT_V@)
@@ -334,12 +335,12 @@ readfile_LDADD = libfilereader.la
 lib_LTLIBRARIES = libfilereader.la
 libfilereader_la_SOURCES = \
 	filereader.cpp filereader_core.cpp filereader_stdio.cpp \
-	filereader_mmap.cpp tablereader.cpp
+	filereader_mmap.cpp tablereader.cpp csvreader.cpp
 
 libfilereader_la_includedir = $(includedir)/filereader
 libfilereader_la_include_HEADERS = \
 	filereader.hpp filereader_stdio.hpp filereader_core.hpp \
-	filereader_mmap.hpp tablereader.hpp
+	filereader_mmap.hpp tablereader.hpp csvreader.hpp
 
 all: config.h
 	$(MAKE) $(AM_MAKEFLAGS) all-am
@@ -489,6 +490,7 @@ mostlyclean-compile:
 distclean-compile:
 	-rm -f *.tab.c
 
+@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/csvreader.Plo@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/filereader.Plo@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/filereader_core.Plo@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/filereader_mmap.Plo@am__quote@

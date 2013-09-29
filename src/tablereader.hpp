@@ -18,7 +18,7 @@ public:
     virtual const char* error_message();
 
     // column text is not null terminated!
-    // returned pointer will expired at next readnext call!
+    // returned pointer will expire at next readnext call!
     virtual const char* readnext(size_t *readlen, bool *islinelast);
 
 protected:
