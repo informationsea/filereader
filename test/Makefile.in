@@ -94,13 +94,16 @@ CONFIG_HEADER = $(top_builddir)/src/config.h
 CONFIG_CLEAN_FILES =
 CONFIG_CLEAN_VPATH_FILES =
 LTLIBRARIES = $(noinst_LTLIBRARIES)
-test_filereader_la_LIBADD =
-am_test_filereader_la_OBJECTS = test_filereader.lo
-test_filereader_la_OBJECTS = $(am_test_filereader_la_OBJECTS)
+test_csv_la_LIBADD =
+am_test_csv_la_OBJECTS = test_csv.lo
+test_csv_la_OBJECTS = $(am_test_csv_la_OBJECTS)
 AM_V_lt = $(am__v_lt_@AM_V@)
 am__v_lt_ = $(am__v_lt_@AM_DEFAULT_V@)
 am__v_lt_0 = --silent
 am__v_lt_1 = 
+test_filereader_la_LIBADD =
+am_test_filereader_la_OBJECTS = test_filereader.lo
+test_filereader_la_OBJECTS = $(am_test_filereader_la_OBJECTS)
 test_table_la_LIBADD =
 am_test_table_la_OBJECTS = test_table.lo
 test_table_la_OBJECTS = $(am_test_table_la_OBJECTS)
@@ -138,8 +141,10 @@ AM_V_CXXLD = $(am__v_CXXLD_@AM_V@)
 am__v_CXXLD_ = $(am__v_CXXLD_@AM_DEFAULT_V@)
 am__v_CXXLD_0 = @echo "  CXXLD   " $@;
 am__v_CXXLD_1 = 
-SOURCES = $(test_filereader_la_SOURCES) $(test_table_la_SOURCES)
-DIST_SOURCES = $(test_filereader_la_SOURCES) $(test_table_la_SOURCES)
+SOURCES = $(test_csv_la_SOURCES) $(test_filereader_la_SOURCES) \
+	$(test_table_la_SOURCES)
+DIST_SOURCES = $(test_csv_la_SOURCES) $(test_filereader_la_SOURCES) \
+	$(test_table_la_SOURCES)
 am__can_run_installinfo = \
   case $$AM_UPDATE_INFO_DIR in \
     n|no|NO) false;; \
@@ -498,12 +503,13 @@ top_builddir = @top_builddir@
 top_srcdir = @top_srcdir@
 TESTS = run-test.sh
 TESTS_ENVIRONMENT = CUTTER="$(CUTTER)"
-EXTRA_DIST = TESTFILE TESTTABLE.TVS
+EXTRA_DIST = TESTFILE TESTTABLE.TVS TESTCSV.csv LARGECSV.csv
 AM_LDFLAGS = -module -rpath $(libdir) -avoid-version -no-undefined
 AM_CPPFLAGS = $(CPPCUTTER_CFLAGS) -O0 -g
-noinst_LTLIBRARIES = test_filereader.la test_table.la
+noinst_LTLIBRARIES = test_filereader.la test_table.la test_csv.la
 test_filereader_la_SOURCES = test_filereader.cpp
 test_table_la_SOURCES = test_table.cpp
+test_csv_la_SOURCES = test_csv.cpp
 all: all-am
 
 .SUFFIXES:
@@ -550,6 +556,9 @@ clean-noinstLTLIBRARIES:
 	  rm -f $${locs}; \
 	}
 
+test_csv.la: $(test_csv_la_OBJECTS) $(test_csv_la_DEPENDENCIES) $(EXTRA_test_csv_la_DEPENDENCIES) 
+	$(AM_V_CXXLD)$(CXXLINK)  $(test_csv_la_OBJECTS) $(test_csv_la_LIBADD) $(LIBS)
+
 test_filereader.la: $(test_filereader_la_OBJECTS) $(test_filereader_la_DEPENDENCIES) $(EXTRA_test_filereader_la_DEPENDENCIES) 
 	$(AM_V_CXXLD)$(CXXLINK)  $(test_filereader_la_OBJECTS) $(test_filereader_la_LIBADD) $(LIBS)
 
@@ -562,6 +571,7 @@ mostlyclean-compile:
 distclean-compile:
 	-rm -f *.tab.c
 
+@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/test_csv.Plo@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/test_filereader.Plo@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/test_table.Plo@am__quote@
 

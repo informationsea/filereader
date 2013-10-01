@@ -24,6 +24,8 @@ public:
 protected:
     FileReader *m_filereader;
     int m_errorno;
+
+    virtual bool open(FileReader *newfilreader);
     
 private:
     

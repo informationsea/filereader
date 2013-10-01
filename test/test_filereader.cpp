@@ -4,18 +4,25 @@
 namespace stdiotest {
 
     static void fileread_test(FileReader *reader) {
-        cut_assert_equal_int(true, reader->open_path("TESTFILE"));
+        cut_assert_equal_boolean(true, reader->open_path("TESTFILE"));
+        cut_assert_equal_int(93, reader->length());
+        
         size_t readlen;
         const char* buf = reader->read(16, &readlen);
+        cut_assert(NULL != buf);
         cut_assert_equal_int(16, readlen);
         cut_assert_equal_memory("0123456789ABCDEF", 16, buf, readlen);
 
         cut_assert_equal_int(true, reader->seek(32));
         buf = reader->read(16, &readlen);
+        cut_assert(NULL != buf);
         cut_assert_equal_memory("0123456789ABCDEF", 16, buf, readlen);
+
+        cut_assert_equal_int(32+16, reader->tell());
 
         cut_assert_equal_int(true, reader->seek(80));
         buf = reader->read(16, &readlen);
+        cut_assert(NULL != buf);
         cut_assert_equal_memory("Test appedix\n", 13, buf, readlen);
     }
 

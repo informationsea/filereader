@@ -7,7 +7,7 @@
 #include <sys/stat.h>
 
 MmapReader::MmapReader() :
-    m_fd(0), m_mapped_buffer(0),
+    m_mapped_buffer(0),
     m_mapped_length(0), m_offset(0)
 {
     

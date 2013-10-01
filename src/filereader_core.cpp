@@ -5,10 +5,12 @@
 #include <errno.h>
 #include <string.h>
 #include <fcntl.h>
+#include <sys/stat.h>
 
 #define MINIMUM_BUFFER_SIZE 1024
 
 FileReader::FileReader() :
+    m_fd(0),
     m_errorno(0), m_path(0), m_buffer(0), m_buffer_size(0)
 {
 
@@ -53,6 +55,24 @@ bool FileReader::seek(off_t offset)
 {
     (void)offset;
     return false;
+}
+
+off_t FileReader::tell(void)
+{
+    return -1;
+}
+
+off_t FileReader::length(void)
+{
+    if (m_fd == 0)
+        return -1;
+
+    struct stat statinfo;
+    int ret = ::fstat(m_fd, &statinfo);
+    if (ret != 0)
+        return -1;
+    return statinfo.st_size;
+    
 }
 
 const char* FileReader::read(size_t length, size_t *readlen)

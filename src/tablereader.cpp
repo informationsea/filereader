@@ -23,7 +23,7 @@ bool TableReader::open_path(const char* path)
         m_errorno = errno;
         return false;
     }
-    return true;
+    return open(m_filereader);
 }
 
 bool TableReader::open(int fd)
@@ -33,7 +33,12 @@ bool TableReader::open(int fd)
         m_errorno = errno;
         return false;
     }
-    return true;
+    return open(m_filereader);
+}
+
+bool TableReader::open(FileReader *newfilreader)
+{
+    return true; // do nothing
 }
 
 void TableReader::perror(const char* message)

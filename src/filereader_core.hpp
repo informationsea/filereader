@@ -14,7 +14,9 @@ public:
     virtual bool open(int fd) = 0;
     virtual bool open_path(const char* path);
     
-    virtual bool seek(off_t offset);
+    virtual bool seek(off_t offset); // always fail if not overridden
+    virtual off_t tell(void);        // always fail if not overridden
+    virtual off_t length(void);
     virtual const char* read(size_t length, size_t *readlen);
     virtual int getc() = 0;
     
@@ -28,6 +30,7 @@ public:
     virtual int get_errno();
     
 protected:
+    int m_fd; // used only in length()
     int m_errorno;
     const char* m_path;
 
