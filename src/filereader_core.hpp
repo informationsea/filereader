@@ -17,6 +17,7 @@ public:
     virtual bool seek(off_t offset); // always fail if not overridden
     virtual off_t tell(void);        // always fail if not overridden
     virtual off_t length(void);
+    virtual bool eof(void) = 0;
     virtual const char* read(size_t length, size_t *readlen);
     virtual int getc() = 0;
     

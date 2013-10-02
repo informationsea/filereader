@@ -24,6 +24,8 @@ namespace stdiotest {
         buf = reader->read(16, &readlen);
         cut_assert(NULL != buf);
         cut_assert_equal_memory("Test appedix\n", 13, buf, readlen);
+
+        cut_assert_equal_boolean(true, reader->eof());
     }
 
     static void readline_test(FileReader *reader) {
@@ -45,6 +47,8 @@ namespace stdiotest {
         buf = reader->readline_dup();
         cut_assert_equal_string("", buf);
         free(buf);
+
+        cut_assert_equal_boolean(true, reader->eof());
     }
 
     void test_stdio_fileread(void)

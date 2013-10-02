@@ -12,6 +12,7 @@ public:
     virtual bool open(int fd);
     virtual bool seek(off_t offset);
     virtual off_t tell(void);
+    virtual bool eof(void);
     virtual int getc();
 
 private:

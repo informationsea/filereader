@@ -90,5 +90,26 @@ namespace csv {
             cut_assert_equal_int(true, islinelast, cut_message("Line %d", i));
         }
     }
+
+    void test_largecsv2(void) {
+        CSVReader *reader = new CSVReader();
+        const char* test_file_path = cut_build_fixture_path(".", "LARGECSV2.csv", NULL);
+        cut_assert_equal_int(true, reader->open_path(test_file_path));
+
+        bool islinelast;
+        size_t readlen;
+        const char *column;
+
+        for (int i = 1; i < 1000; i++) {
+            column = reader->readnext(&readlen, &islinelast);
+            cut_assert_equal_memory("Column \" A", 10, column, readlen, cut_message("Line %d", i));
+            cut_assert_equal_int(false, islinelast, cut_message("Line %d", i));
+
+            column = reader->readnext(&readlen, &islinelast);
+            cut_assert_equal_memory("Multi line \"\"\rcolumn", 20, column, readlen, cut_message("Line %d", i));
+            cut_assert_equal_int(true, islinelast, cut_message("Line %d", i));
+        }
+    }
+
     
 }

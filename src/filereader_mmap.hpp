@@ -16,6 +16,7 @@ public:
     virtual bool seek(off_t offset);
     virtual off_t tell(void) {return m_offset;}
     virtual off_t length(void) {return m_filesize;}
+    virtual bool eof(void) {return m_offset == m_filesize;}
     virtual int getc();
     virtual const char* readblock(size_t *readlen, isdelimiter_func f, void* userobj);
 

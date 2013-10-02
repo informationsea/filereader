@@ -38,6 +38,11 @@ off_t StdioFileReader::tell(void)
     return ftello(m_file);
 }
 
+bool StdioFileReader::eof(void)
+{
+    return feof(m_file) ? true : false;
+}
+
 int StdioFileReader::getc()
 {
     return fgetc(m_file);
