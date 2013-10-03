@@ -59,8 +59,10 @@ const char* CSVReader::readnext(size_t *readlen, bool *islinelast)
                                            &incomplete_quote, &should_copy, &state);
     if (!endofbuffer)
         return value;
-    if (m_filereader->eof())
+    if (m_filereader->eof()) {
+        printf("End of file\n");
         return value;
+    }
 
     {
         char *str = strndup(value, *readlen);
@@ -218,12 +220,17 @@ const char* CSVReader::readnext_in_buffer(size_t *readlen, bool *islinelast,
     }
 
     m_current_offset += *readlen + 1;
-    if (m_current_offset == m_filereader_buffer_size+1) {
-        *islinelast = true;
-        *endofbuffer = true;
-        if (quoted && *state != END) {
-            *incomplete_quote = true;
-            quoted = false;
+    if (m_current_offset >= m_filereader_buffer_size) {
+        if (m_filereader->eof()) {
+            *islinelast = true;
+            printf("read next: %d %d %d %zu\n", *state, quoted, *incomplete_quote, *readlen);
+        } else {
+            *islinelast = true;
+            *endofbuffer = true;
+            if (quoted && (*state != END || *state != ENDING_QUOTE)) {
+                *incomplete_quote = true;
+                quoted = false;
+            }
         }
     }
 

@@ -76,7 +76,7 @@ namespace csv {
         size_t readlen;
         const char *column;
 
-        for (int i = 1; i < 1100; i++) {
+        for (int i = 0; i < 1100; i++) {
             column = reader->readnext(&readlen, &islinelast);
             cut_assert_equal_memory("Column A", 8, column, readlen, cut_message("Line %d", i));
             cut_assert_equal_int(false, islinelast, cut_message("Line %d", i));
@@ -89,6 +89,14 @@ namespace csv {
             cut_assert_equal_memory("Column C", 8, column, readlen, cut_message("Line %d", i));
             cut_assert_equal_int(true, islinelast, cut_message("Line %d", i));
         }
+
+        column = reader->readnext(&readlen, &islinelast);
+        if (column != NULL) {
+            char *str = strndup(column, readlen);
+            printf(":: %d %s\n", readlen, str);
+        }
+
+        cut_assert_equal_pointer(NULL, column);
     }
 
     void test_largecsv2(void) {
@@ -100,7 +108,7 @@ namespace csv {
         size_t readlen;
         const char *column;
 
-        for (int i = 1; i < 1000; i++) {
+        for (int i = 0; i < 1000; i++) {
             column = reader->readnext(&readlen, &islinelast);
             cut_assert_equal_memory("Column \" A", 10, column, readlen, cut_message("Line %d", i));
             cut_assert_equal_int(false, islinelast, cut_message("Line %d", i));
@@ -109,7 +117,8 @@ namespace csv {
             cut_assert_equal_memory("Multi line \"\"\rcolumn", 20, column, readlen, cut_message("Line %d", i));
             cut_assert_equal_int(true, islinelast, cut_message("Line %d", i));
         }
+        
+        column = reader->readnext(&readlen, &islinelast);
+        cut_assert_equal_pointer(NULL, column);
     }
-
-    
 }
