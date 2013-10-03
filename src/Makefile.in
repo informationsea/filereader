@@ -136,7 +136,7 @@ am__v_lt_ = $(am__v_lt_@AM_DEFAULT_V@)
 am__v_lt_0 = --silent
 am__v_lt_1 = 
 PROGRAMS = $(bin_PROGRAMS)
-am_readfile_OBJECTS = test.$(OBJEXT)
+am_readfile_OBJECTS = readfile.$(OBJEXT)
 readfile_OBJECTS = $(am_readfile_OBJECTS)
 readfile_DEPENDENCIES = libfilereader.la
 AM_V_P = $(am__v_P_@AM_V@)
@@ -330,7 +330,7 @@ top_build_prefix = @top_build_prefix@
 top_builddir = @top_builddir@
 top_srcdir = @top_srcdir@
 AM_LDFLAGS = -no-undefined
-readfile_SOURCES = test.cpp
+readfile_SOURCES = readfile.cpp
 readfile_LDADD = libfilereader.la
 lib_LTLIBRARIES = libfilereader.la
 libfilereader_la_SOURCES = \
@@ -495,8 +495,8 @@ distclean-compile:
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/filereader_core.Plo@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/filereader_mmap.Plo@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/filereader_stdio.Plo@am__quote@
+@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/readfile.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/tablereader.Plo@am__quote@
-@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/test.Po@am__quote@
 
 .cpp.o:
 @am__fastdepCXX_TRUE@	$(AM_V_CXX)$(CXXCOMPILE) -MT $@ -MD -MP -MF $(DEPDIR)/$*.Tpo -c -o $@ $<
