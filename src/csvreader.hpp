@@ -11,6 +11,8 @@ public:
     virtual ~CSVReader();
 
     virtual const char* readnext(size_t *readlen, bool *islinelast);
+    virtual bool eof();
+    virtual off_t tell();
 
 protected:
     virtual bool open(FileReader *newfilreader);

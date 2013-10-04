@@ -49,6 +49,20 @@ bool CSVReader::open(FileReader */* newfilreader */)
 
 }
 
+bool CSVReader::eof()
+{
+    if (m_current_offset >= m_filereader_buffer_size &&
+        m_filereader->eof()) {
+        return true;
+    }
+    return false;
+}
+
+off_t CSVReader::tell()
+{
+    return m_current_offset + m_filereader_buffer_offset;
+}
+
 const char* CSVReader::readnext(size_t *readlen, bool *islinelast)
 {
     bool endofbuffer;

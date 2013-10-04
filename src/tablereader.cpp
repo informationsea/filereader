@@ -41,6 +41,16 @@ bool TableReader::open(FileReader *newfilreader)
     return true; // do nothing
 }
 
+bool TableReader::eof()
+{
+    return m_filereader->eof();
+}
+
+off_t TableReader::tell()
+{
+    return m_filereader->tell();
+}
+
 void TableReader::perror(const char* message)
 {
     fprintf(stderr, "%s : %s\n", message, strerror(m_errorno));

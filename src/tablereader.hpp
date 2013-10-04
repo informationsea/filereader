@@ -2,6 +2,7 @@
 #define _TABLEREADER_H_
 
 #include <stdlib.h>
+#include <sys/types.h>
 
 class FileReader;
 
@@ -13,6 +14,8 @@ public:
 
     virtual bool open_path(const char* path);
     virtual bool open(int fd);
+    virtual bool eof();
+    virtual off_t tell();
 
     virtual void perror(const char* message);
     virtual const char* error_message();
