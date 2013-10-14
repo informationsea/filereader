@@ -1,5 +1,7 @@
 #include "filereader_mmap.hpp"
 
+#ifndef _WIN32
+
 #include <stdio.h>
 #include <errno.h>
 #include <unistd.h>
@@ -91,3 +93,5 @@ const char* MmapReader::readblock(size_t *readlen, isdelimiter_func f, void* use
     m_offset += *readlen;
     return m_mapped_buffer + original_offset;
 }
+
+#endif

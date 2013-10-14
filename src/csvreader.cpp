@@ -28,7 +28,7 @@ CSVReader::~CSVReader()
         free(m_buffer2);
 }
 
-bool CSVReader::open(FileReader */* newfilreader */)
+bool CSVReader::open(FileReader * /* newfilreader */)
 {
     m_filereader_buffer_offset = m_filereader->tell();
     m_filereader_buffer = m_filereader->read(DEFAULT_BUFFER_SIZE, &m_filereader_buffer_size);
@@ -62,6 +62,17 @@ off_t CSVReader::tell()
 {
     return m_current_offset + m_filereader_buffer_offset;
 }
+
+#ifdef _WIN32
+char * strndup(const char *s1, size_t n)
+{
+    char *buf = (char *)malloc(n+1);
+    memcpy(buf, s1, n+1);
+    buf[n] = '\0';
+    return buf;
+}
+
+#endif
 
 const char* CSVReader::readnext(size_t *readlen, bool *islinelast)
 {

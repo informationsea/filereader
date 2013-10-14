@@ -2,6 +2,7 @@
 #define _FILEREADER_CORE_H_
 
 #include <stdio.h>
+#include <sys/types.h>
 
 typedef bool (isdelimiter_func)(char ch, void *userobj);
 

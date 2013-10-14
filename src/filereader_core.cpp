@@ -7,6 +7,10 @@
 #include <fcntl.h>
 #include <sys/stat.h>
 
+#ifdef _WIN32
+#include <io.h>
+#endif
+
 #define MINIMUM_BUFFER_SIZE 1024
 
 FileReader::FileReader() :
@@ -25,7 +29,11 @@ FileReader::~FileReader()
 
 bool FileReader::open_path(const char* path)
 {
+#ifdef _WIN32
+    int fd = _open(path, _O_RDONLY);
+#else
     int fd = ::open(path, O_RDONLY);
+#endif
     if (fd < 0) {
         m_errorno = errno;
         return false;
