@@ -1,6 +1,6 @@
 TESTS = run-test.sh
 TESTS_ENVIRONMENT = CUTTER="$(CUTTER)"
-EXTRA_DIST = TESTFILE TESTTABLE.TVS TESTCSV.csv LARGECSV.csv
+EXTRA_DIST = run-test.sh TESTFILE TESTTABLE.TVS TESTCSV.csv LARGECSV.csv
 
 AM_LDFLAGS = -module -rpath $(libdir) -avoid-version -no-undefined
 AM_CPPFLAGS = $(CPPCUTTER_CFLAGS) -O0 -g
