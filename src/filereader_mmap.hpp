@@ -1,6 +1,8 @@
 #ifndef _FILEREADER_MMAP_H_
 #define _FILEREADER_MMAP_H_
 
+#ifndef _WIN32
+
 #include <sys/types.h>
 
 #include "filereader_core.hpp"
@@ -27,6 +29,7 @@ private:
     off_t m_offset;
 };
 
+#endif
 
 #endif /* _FILEREADER_MMAP_H_ */
 
