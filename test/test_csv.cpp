@@ -1,5 +1,6 @@
 #include <cppcutter.h>
 #include <csvreader.hpp>
+#include <stdio.h>
 
 namespace csv {
 
