@@ -4,6 +4,7 @@
 #include "filereader_core.hpp"
 #include "filereader_stdio.hpp"
 #include "filereader_mmap.hpp"
+#include "filereader_gzip.hpp"
 
 class FileReader;
 

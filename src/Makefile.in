@@ -126,10 +126,11 @@ am__uninstall_files_from_dir = { \
 am__installdirs = "$(DESTDIR)$(libdir)" "$(DESTDIR)$(bindir)" \
 	"$(DESTDIR)$(libfilereader_la_includedir)"
 LTLIBRARIES = $(lib_LTLIBRARIES)
-libfilereader_la_LIBADD =
+am__DEPENDENCIES_1 =
+libfilereader_la_DEPENDENCIES = $(am__DEPENDENCIES_1)
 am_libfilereader_la_OBJECTS = filereader.lo filereader_core.lo \
-	filereader_stdio.lo filereader_mmap.lo tablereader.lo \
-	csvreader.lo
+	filereader_stdio.lo filereader_mmap.lo filereader_gzip.lo \
+	tablereader.lo csvreader.lo
 libfilereader_la_OBJECTS = $(am_libfilereader_la_OBJECTS)
 AM_V_lt = $(am__v_lt_@AM_V@)
 am__v_lt_ = $(am__v_lt_@AM_DEFAULT_V@)
@@ -329,19 +330,22 @@ target_alias = @target_alias@
 top_build_prefix = @top_build_prefix@
 top_builddir = @top_builddir@
 top_srcdir = @top_srcdir@
+zlib_CFLAGS = @zlib_CFLAGS@
+zlib_LIBS = @zlib_LIBS@
 AM_LDFLAGS = -no-undefined
 readfile_SOURCES = readfile.cpp
 readfile_LDADD = libfilereader.la
 lib_LTLIBRARIES = libfilereader.la
 libfilereader_la_SOURCES = \
 	filereader.cpp filereader_core.cpp filereader_stdio.cpp \
-	filereader_mmap.cpp tablereader.cpp csvreader.cpp
+	filereader_mmap.cpp filereader_gzip.cpp tablereader.cpp csvreader.cpp
 
 libfilereader_la_includedir = $(includedir)/filereader
 libfilereader_la_include_HEADERS = \
 	filereader.hpp filereader_stdio.hpp filereader_core.hpp \
-	filereader_mmap.hpp tablereader.hpp csvreader.hpp
+	filereader_mmap.hpp filereader_gzip.hpp tablereader.hpp csvreader.hpp
 
+libfilereader_la_LIBADD = $(zlib_LIBS)
 all: config.h
 	$(MAKE) $(AM_MAKEFLAGS) all-am
 
@@ -493,6 +497,7 @@ distclean-compile:
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/csvreader.Plo@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/filereader.Plo@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/filereader_core.Plo@am__quote@
+@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/filereader_gzip.Plo@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/filereader_mmap.Plo@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/filereader_stdio.Plo@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/readfile.Po@am__quote@

@@ -32,6 +32,7 @@ AC_PROG_MAKE_SET
 AC_PROG_RANLIB
 
 # Checks for libraries.
+PKG_CHECK_MODULES(zlib, zlib >= 0.28)
 
 # Checks for header files.
 AC_CHECK_HEADERS([fcntl.h string.h])
