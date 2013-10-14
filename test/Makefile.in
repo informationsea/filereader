@@ -78,6 +78,7 @@ PRE_UNINSTALL = :
 POST_UNINSTALL = :
 build_triplet = @build@
 host_triplet = @host@
+@WITH_CUTTER_TRUE@am__append_1 = $(CPPCUTTER_LIBS) $(top_builddir)/src/libfilereader.la
 subdir = test
 DIST_COMMON = $(srcdir)/Makefile.in $(srcdir)/Makefile.am \
 	$(top_srcdir)/build-aux/depcomp \
@@ -95,18 +96,24 @@ CONFIG_CLEAN_FILES =
 CONFIG_CLEAN_VPATH_FILES =
 LTLIBRARIES = $(noinst_LTLIBRARIES)
 test_csv_la_LIBADD =
-am_test_csv_la_OBJECTS = test_csv.lo
+am__test_csv_la_SOURCES_DIST = test_csv.cpp
+@WITH_CUTTER_TRUE@am_test_csv_la_OBJECTS = test_csv.lo
 test_csv_la_OBJECTS = $(am_test_csv_la_OBJECTS)
 AM_V_lt = $(am__v_lt_@AM_V@)
 am__v_lt_ = $(am__v_lt_@AM_DEFAULT_V@)
 am__v_lt_0 = --silent
 am__v_lt_1 = 
+@WITH_CUTTER_TRUE@am_test_csv_la_rpath =
 test_filereader_la_LIBADD =
-am_test_filereader_la_OBJECTS = test_filereader.lo
+am__test_filereader_la_SOURCES_DIST = test_filereader.cpp
+@WITH_CUTTER_TRUE@am_test_filereader_la_OBJECTS = test_filereader.lo
 test_filereader_la_OBJECTS = $(am_test_filereader_la_OBJECTS)
+@WITH_CUTTER_TRUE@am_test_filereader_la_rpath =
 test_table_la_LIBADD =
-am_test_table_la_OBJECTS = test_table.lo
+am__test_table_la_SOURCES_DIST = test_table.cpp
+@WITH_CUTTER_TRUE@am_test_table_la_OBJECTS = test_table.lo
 test_table_la_OBJECTS = $(am_test_table_la_OBJECTS)
+@WITH_CUTTER_TRUE@am_test_table_la_rpath =
 AM_V_P = $(am__v_P_@AM_V@)
 am__v_P_ = $(am__v_P_@AM_DEFAULT_V@)
 am__v_P_0 = false
@@ -143,8 +150,9 @@ am__v_CXXLD_0 = @echo "  CXXLD   " $@;
 am__v_CXXLD_1 = 
 SOURCES = $(test_csv_la_SOURCES) $(test_filereader_la_SOURCES) \
 	$(test_table_la_SOURCES)
-DIST_SOURCES = $(test_csv_la_SOURCES) $(test_filereader_la_SOURCES) \
-	$(test_table_la_SOURCES)
+DIST_SOURCES = $(am__test_csv_la_SOURCES_DIST) \
+	$(am__test_filereader_la_SOURCES_DIST) \
+	$(am__test_table_la_SOURCES_DIST)
 am__can_run_installinfo = \
   case $$AM_UPDATE_INFO_DIR in \
     n|no|NO) false;; \
@@ -417,7 +425,7 @@ INSTALL_STRIP_PROGRAM = @INSTALL_STRIP_PROGRAM@
 LD = @LD@
 LDFLAGS = @LDFLAGS@
 LIBOBJS = @LIBOBJS@
-LIBS = $(CPPCUTTER_LIBS) $(top_builddir)/src/libfilereader.la
+LIBS = @LIBS@ $(am__append_1)
 LIBTOOL = @LIBTOOL@
 LIPO = @LIPO@
 LN_S = @LN_S@
@@ -501,15 +509,15 @@ target_alias = @target_alias@
 top_build_prefix = @top_build_prefix@
 top_builddir = @top_builddir@
 top_srcdir = @top_srcdir@
-TESTS = run-test.sh
-TESTS_ENVIRONMENT = CUTTER="$(CUTTER)"
-EXTRA_DIST = run-test.sh TESTFILE TESTTABLE.TVS TESTCSV.csv LARGECSV.csv
-AM_LDFLAGS = -module -rpath $(libdir) -avoid-version -no-undefined
-AM_CPPFLAGS = $(CPPCUTTER_CFLAGS) -O0 -g
-noinst_LTLIBRARIES = test_filereader.la test_table.la test_csv.la
-test_filereader_la_SOURCES = test_filereader.cpp
-test_table_la_SOURCES = test_table.cpp
-test_csv_la_SOURCES = test_csv.cpp
+@WITH_CUTTER_TRUE@TESTS = run-test.sh
+@WITH_CUTTER_TRUE@TESTS_ENVIRONMENT = CUTTER="$(CUTTER)"
+@WITH_CUTTER_TRUE@EXTRA_DIST = run-test.sh TESTFILE TESTTABLE.TVS TESTCSV.csv LARGECSV.csv
+@WITH_CUTTER_TRUE@AM_LDFLAGS = -module -rpath $(libdir) -avoid-version -no-undefined
+@WITH_CUTTER_TRUE@AM_CPPFLAGS = $(CPPCUTTER_CFLAGS) -O0 -g
+@WITH_CUTTER_TRUE@noinst_LTLIBRARIES = test_filereader.la test_table.la test_csv.la
+@WITH_CUTTER_TRUE@test_filereader_la_SOURCES = test_filereader.cpp
+@WITH_CUTTER_TRUE@test_table_la_SOURCES = test_table.cpp
+@WITH_CUTTER_TRUE@test_csv_la_SOURCES = test_csv.cpp
 all: all-am
 
 .SUFFIXES:
@@ -557,13 +565,13 @@ clean-noinstLTLIBRARIES:
 	}
 
 test_csv.la: $(test_csv_la_OBJECTS) $(test_csv_la_DEPENDENCIES) $(EXTRA_test_csv_la_DEPENDENCIES) 
-	$(AM_V_CXXLD)$(CXXLINK)  $(test_csv_la_OBJECTS) $(test_csv_la_LIBADD) $(LIBS)
+	$(AM_V_CXXLD)$(CXXLINK) $(am_test_csv_la_rpath) $(test_csv_la_OBJECTS) $(test_csv_la_LIBADD) $(LIBS)
 
 test_filereader.la: $(test_filereader_la_OBJECTS) $(test_filereader_la_DEPENDENCIES) $(EXTRA_test_filereader_la_DEPENDENCIES) 
-	$(AM_V_CXXLD)$(CXXLINK)  $(test_filereader_la_OBJECTS) $(test_filereader_la_LIBADD) $(LIBS)
+	$(AM_V_CXXLD)$(CXXLINK) $(am_test_filereader_la_rpath) $(test_filereader_la_OBJECTS) $(test_filereader_la_LIBADD) $(LIBS)
 
 test_table.la: $(test_table_la_OBJECTS) $(test_table_la_DEPENDENCIES) $(EXTRA_test_table_la_DEPENDENCIES) 
-	$(AM_V_CXXLD)$(CXXLINK)  $(test_table_la_OBJECTS) $(test_table_la_LIBADD) $(LIBS)
+	$(AM_V_CXXLD)$(CXXLINK) $(am_test_table_la_rpath) $(test_table_la_OBJECTS) $(test_table_la_LIBADD) $(LIBS)
 
 mostlyclean-compile:
 	-rm -f *.$(OBJEXT)
@@ -973,8 +981,8 @@ uninstall-am:
 	recheck tags tags-am uninstall uninstall-am
 
 
-echo-cutter:
-	@echo $(CUTTER)
+@WITH_CUTTER_TRUE@echo-cutter:
+@WITH_CUTTER_TRUE@	@echo $(CUTTER)
 
 # Tell versions [3.59,3.63) of GNU make to not export all variables.
 # Otherwise a system limit (for SysV at least) may be exceeded.

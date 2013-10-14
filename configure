@@ -644,6 +644,8 @@ CXXDEPMODE
 ac_ct_CXX
 CXXFLAGS
 CXX
+WITH_CUTTER_FALSE
+WITH_CUTTER_TRUE
 CPPCUTTER_LIBS
 CPPCUTTER_CFLAGS
 CUTTER
@@ -12183,6 +12185,15 @@ fi
 
 
 
+ if test "$ac_cv_use_cutter" != "no"; then
+  WITH_CUTTER_TRUE=
+  WITH_CUTTER_FALSE='#'
+else
+  WITH_CUTTER_TRUE='#'
+  WITH_CUTTER_FALSE=
+fi
+
+
 ac_ext=cpp
 ac_cpp='$CXXCPP $CPPFLAGS'
 ac_compile='$CXX -c $CXXFLAGS $CPPFLAGS conftest.$ac_ext >&5'
@@ -17340,7 +17351,7 @@ $as_echo "#define HAVE_MMAP 1" >>confdefs.h
 fi
 rm -f conftest.mmap conftest.txt
 
-for ac_func in strerror strtol munmap
+for ac_func in strerror strtol munmap strndup
 do :
   as_ac_var=`$as_echo "ac_cv_func_$ac_func" | $as_tr_sh`
 ac_fn_c_check_func "$LINENO" "$ac_func" "$as_ac_var"
@@ -17486,6 +17497,10 @@ Usually this means the macro was only invoked conditionally." "$LINENO" 5
 fi
 if test -z "${am__fastdepCC_TRUE}" && test -z "${am__fastdepCC_FALSE}"; then
   as_fn_error $? "conditional \"am__fastdepCC\" was never defined.
+Usually this means the macro was only invoked conditionally." "$LINENO" 5
+fi
+if test -z "${WITH_CUTTER_TRUE}" && test -z "${WITH_CUTTER_FALSE}"; then
+  as_fn_error $? "conditional \"WITH_CUTTER\" was never defined.
 Usually this means the macro was only invoked conditionally." "$LINENO" 5
 fi
 if test -z "${am__fastdepCXX_TRUE}" && test -z "${am__fastdepCXX_FALSE}"; then

@@ -19,7 +19,9 @@ ACLOCAL_AMFLAGS="-I m4"
 AM_SILENT_RULES([yes])
 AM_PROG_LIBTOOL([shared])
 
-AC_CHECK_CPPCUTTER
+m4_ifdef([AC_CHECK_CPPCUTTER], [AC_CHECK_CPPCUTTER], [ac_cv_use_cutter="no"])
+AM_CONDITIONAL([WITH_CUTTER], [test "$ac_cv_use_cutter" != "no"])
+
 AC_PROG_CXX
 AC_PROG_AWK
 AC_PROG_CC
@@ -44,7 +46,7 @@ AC_FUNC_FSEEKO
 AC_FUNC_MALLOC
 AC_FUNC_REALLOC
 AC_FUNC_MMAP
-AC_CHECK_FUNCS([strerror strtol munmap])
+AC_CHECK_FUNCS([strerror strtol munmap strndup])
 
 AC_CONFIG_FILES([Makefile src/Makefile test/Makefile])
 AC_OUTPUT
