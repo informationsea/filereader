@@ -1,5 +1,7 @@
 #include "filereader.hpp"
 
+#include <string.h>
+
 FileReader *filereader_get_suitable_reader(int fd)
 {
 #ifndef _WIN32
@@ -19,6 +21,16 @@ FileReader *filereader_get_suitable_reader(int fd)
 
 FileReader *filereader_get_suitable_reader(const char* path)
 {
+    size_t pathlen = strlen(path);
+    fprintf(stderr, "%s %s\n", path + pathlen - 3, path);
+    if (strncmp(path+pathlen-3, ".gz", 3) == 0) {
+        fprintf(stderr, "Gzip\n");
+        GzipFileReader *gfr = new GzipFileReader();
+        if (gfr->open_path(path))
+            return gfr;
+        delete gfr;
+    }
+
 #ifndef _WIN32
     MmapReader *mmapreader = new MmapReader();
     if (mmapreader->open_path(path))
