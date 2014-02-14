@@ -1,6 +1,8 @@
 #ifndef _FILEREADER_GZIP_H_
 #define _FILEREADER_GZIP_H_
 
+#ifndef DISABLE_GZIP
+
 #include "filereader_core.hpp"
 #include <zlib.h>
 
@@ -20,5 +22,6 @@ private:
     gzFile m_file;
 };
 
+#endif
 
 #endif /* _FILEREADER_GZIP_H_ */

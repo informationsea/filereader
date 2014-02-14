@@ -1,5 +1,7 @@
 #include "filereader_gzip.hpp"
 
+#ifndef DISABLE_GZIP
+
 GzipFileReader::GzipFileReader() :
     m_file(0)
 {
@@ -41,4 +43,4 @@ int GzipFileReader::getc()
     return gzgetc(m_file);
 }
 
-
+#endif
