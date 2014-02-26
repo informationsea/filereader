@@ -4,6 +4,50 @@
 
 namespace csv {
 
+    void test_readcsv2(void) {
+        CSVReader *reader = new CSVReader();
+        const char* test_file_path = cut_build_fixture_path(".", "TESTCSV2.csv", NULL);
+        cut_assert_equal_int(true, reader->open_path(test_file_path));
+
+        bool islinelast;
+        size_t readlen;
+        const char *column;
+        
+        column = reader->readnext(&readlen, &islinelast);
+        cut_assert_equal_memory("This", 4, column, readlen);
+        cut_assert_equal_boolean(false, islinelast);
+        cut_assert_equal_int(5, reader->tell());
+
+        column = reader->readnext(&readlen, &islinelast);
+        cut_assert_equal_memory("", 0, column, readlen);
+        cut_assert_equal_boolean(false, islinelast);
+        cut_assert_equal_int(6, reader->tell());
+
+        column = reader->readnext(&readlen, &islinelast);
+        cut_assert_equal_memory("", 0, column, readlen);
+        cut_assert_equal_boolean(true, islinelast);
+        cut_assert_equal_int(7, reader->tell());
+
+        column = reader->readnext(&readlen, &islinelast);
+        cut_assert_equal_memory("is", 2, column, readlen);
+        cut_assert_equal_boolean(false, islinelast);
+        cut_assert_equal_int(10, reader->tell());
+
+        column = reader->readnext(&readlen, &islinelast);
+        cut_assert_equal_memory("a", 1, column, readlen);
+        cut_assert_equal_boolean(false, islinelast);
+        cut_assert_equal_int(12, reader->tell());
+
+        column = reader->readnext(&readlen, &islinelast);
+        cut_assert_equal_memory("pen", 3, column, readlen);
+        cut_assert_equal_boolean(true, islinelast);
+        cut_assert_equal_int(16, reader->tell());
+
+        cut_assert_equal_boolean(true, reader->eof());
+        
+        delete reader;
+    }
+
     void test_readcsv(void) {
         CSVReader *reader = new CSVReader();
         const char* test_file_path = cut_build_fixture_path(".", "TESTCSV.csv", NULL);

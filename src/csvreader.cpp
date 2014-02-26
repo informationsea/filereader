@@ -181,8 +181,6 @@ const char* CSVReader::readnext_in_buffer(size_t *readlen, bool *islinelast,
                 quoted = true;
                 *state = IN_QUOTE;
                 goto break2;
-            case '\n':
-                continue;
             }
             *state = DEFAULT;
             // no break at here
