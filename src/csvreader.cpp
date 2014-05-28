@@ -82,18 +82,24 @@ const char* CSVReader::readnext(size_t *readlen, bool *islinelast)
     int state = START;
     const char *value = readnext_in_buffer(readlen, islinelast, &endofbuffer,
                                            &incomplete_quote, &should_copy, &state);
-    if (!endofbuffer)
-        return value;
-    if (m_filereader->eof()) {
-        //printf("End of file\n");
-        return value;
-    }
 
+    if (!endofbuffer || state == END)
+        return value;
+    if (m_filereader->eof())
+        return value;
+
+    /*
     {
         char *str = strndup(value, *readlen);
-        //printf("length: %zu %s\n", *readlen, str);
+        fprintf(stderr, "2 length: %zu %s %d\n", *readlen, str, state);
         free(str);
     }
+    */
+    
+
+    if (*readlen == 0)
+        state = START;
+
     size_t offset = 0;
     size_t length = *readlen;
 
@@ -117,12 +123,14 @@ const char* CSVReader::readnext(size_t *readlen, bool *islinelast)
                 return NULL; // failed to allocate memory; TODO: raise error!
         }
 
-
+        /*
         {
             char *str = strndup(value, *readlen);
-            //printf("length: %zu %s\n", *readlen, str);
+            fprintf(stderr, "1 length: %zu %s %d\n", *readlen, str, state);
             free(str);
         }
+        */
+        
 
         memcpy(m_buffer2 + offset, value, *readlen);
         offset = length;
@@ -171,6 +179,7 @@ const char* CSVReader::readnext_in_buffer(size_t *readlen, bool *islinelast,
 
     char lastchar = '\0';
     bool quoted = false;
+    bool should_skip_first_byte = false;
     
     for (; current < end; current++) {
         //printf("CSV %d : %c\n", *state, *current);
@@ -229,6 +238,8 @@ const char* CSVReader::readnext_in_buffer(size_t *readlen, bool *islinelast,
     }
 
     *readlen = current - start;
+    int extra_offset = 0;
+
     switch(lastchar) {
     case '\n':
     case '\r':
@@ -239,13 +250,13 @@ const char* CSVReader::readnext_in_buffer(size_t *readlen, bool *islinelast,
         break;
     }
 
+
     m_current_offset += *readlen + 1;
     if (m_current_offset >= m_filereader_buffer_size) {
         if (m_filereader->eof()) {
             *islinelast = true;
             //printf("read next: %d %d %d %zu\n", *state, quoted, *incomplete_quote, *readlen);
         } else {
-            *islinelast = true;
             *endofbuffer = true;
             if (quoted && (*state != END || *state != ENDING_QUOTE)) {
                 *incomplete_quote = true;
