@@ -182,4 +182,36 @@ namespace csv {
 
         cut_assert_equal_boolean(true, reader->eof());
     }
+
+    void test_largecsv3(void) {
+        CSVReader *reader = new CSVReader();
+        const char* test_file_path = cut_build_fixture_path(".", "LARGECSV3.csv", NULL);
+        cut_assert_equal_int(true, reader->open_path(test_file_path));
+
+        bool islinelast;
+        size_t readlen;
+        const char *column;
+
+        for (int i = 0; i < 2000; i++) {
+            column = reader->readnext(&readlen, &islinelast);
+            cut_assert_equal_memory("1234567", 7, column, readlen, cut_message("Line %d", i));
+            cut_assert_equal_int(false, islinelast, cut_message("Line %d", i));
+            cut_assert_equal_boolean(false, reader->eof());
+
+            column = reader->readnext(&readlen, &islinelast);
+            cut_assert_equal_memory("ABCDEFG", 7, column, readlen, cut_message("Line %d", i));
+            cut_assert_equal_int(false, islinelast, cut_message("Line %d", i));
+            cut_assert_equal_boolean(false, reader->eof());
+
+            column = reader->readnext(&readlen, &islinelast);
+            cut_assert_equal_memory("abcdefg", 7, column, readlen, cut_message("Line %d", i));
+            cut_assert_equal_int(true, islinelast, cut_message("Line %d", i));
+        }
+        cut_assert_equal_boolean(true, reader->eof());
+        
+        column = reader->readnext(&readlen, &islinelast);
+        cut_assert_equal_pointer(NULL, column);
+
+        cut_assert_equal_boolean(true, reader->eof());
+    }
 }
