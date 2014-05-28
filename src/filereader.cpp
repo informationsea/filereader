@@ -22,7 +22,6 @@ FileReader *filereader_get_suitable_reader(int fd)
 FileReader *filereader_get_suitable_reader(const char* path)
 {
     size_t pathlen = strlen(path);
-    fprintf(stderr, "%s %s\n", path + pathlen - 3, path);
 #ifndef DISABLE_GZIP
     if (strncmp(path+pathlen-3, ".gz", 3) == 0) {
         fprintf(stderr, "Gzip\n");
