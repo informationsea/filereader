@@ -37,6 +37,8 @@ private:
     size_t m_buffer_size;
     char *m_buffer2;
     size_t m_buffer2_size;
+
+    char m_lastchar;
 };
 
 

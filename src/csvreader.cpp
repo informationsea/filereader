@@ -15,7 +15,7 @@ CSVReader::CSVReader() :
     m_filereader_buffer_offset(0),
     m_filereader_buffer(0), m_filereader_buffer_size(0),
     m_current_offset(0),
-    m_buffer(0), m_buffer_size(0), m_buffer2(0), m_buffer2_size(0)
+    m_buffer(0), m_buffer_size(0), m_buffer2(0), m_buffer2_size(0), m_lastchar(0)
 {
 
 }
@@ -177,7 +177,7 @@ const char* CSVReader::readnext_in_buffer(size_t *readlen, bool *islinelast,
         return NULL;
     }
 
-    char lastchar = '\0';
+    char lastchar = m_lastchar;
     bool quoted = false;
     bool should_skip_first_byte = false;
     
@@ -190,13 +190,18 @@ const char* CSVReader::readnext_in_buffer(size_t *readlen, bool *islinelast,
                 quoted = true;
                 *state = IN_QUOTE;
                 goto break2;
+            case '\n':
+                if (lastchar == '\r') {
+                    should_skip_first_byte = true;
+                    goto break2;
+                }
             }
             *state = DEFAULT;
             // no break at here
         case DEFAULT:
             switch (*current) {
-            case ',':
             case '\n':
+            case ',':
             case '\r':
                 *state = END;
                 break;
@@ -247,6 +252,7 @@ const char* CSVReader::readnext_in_buffer(size_t *readlen, bool *islinelast,
         *islinelast = false;
         break;
     }
+    m_lastchar = lastchar;
 
 
     m_current_offset += *readlen + 1;
@@ -261,6 +267,11 @@ const char* CSVReader::readnext_in_buffer(size_t *readlen, bool *islinelast,
                 quoted = false;
             }
         }
+    }
+
+    if (should_skip_first_byte) {
+        start++;
+        *readlen -= 1;
     }
 
     if (quoted && !(*incomplete_quote)) {

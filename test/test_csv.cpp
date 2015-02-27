@@ -48,11 +48,7 @@ namespace csv {
         delete reader;
     }
 
-    void test_readcsv(void) {
-        CSVReader *reader = new CSVReader();
-        const char* test_file_path = cut_build_fixture_path(".", "TESTCSV.csv", NULL);
-        cut_assert_equal_int(true, reader->open_path(test_file_path));
-
+    void helper_test_readcsv(CSVReader *reader, bool windowsReturn) {
         bool islinelast;
         size_t readlen;
         const char *column;
@@ -94,7 +90,12 @@ namespace csv {
         cut_assert_equal_boolean(true, islinelast);
 
         column = reader->readnext(&readlen, &islinelast);
-        cut_assert_equal_memory("Multiple\rline\rcell", 18, column, readlen);
+        if (!windowsReturn) {
+            cut_assert_equal_memory("Multiple\rline\rcell", 18, column, readlen);
+        } else {
+            cut_assert_equal_memory("Multiple\r\nline\r\ncell", 20, column, readlen);
+        }
+        
         cut_assert_equal_boolean(false, islinelast);
 
         column = reader->readnext(&readlen, &islinelast);
@@ -117,6 +118,22 @@ namespace csv {
         cut_assert_equal_boolean(true, reader->eof());
         
         delete reader;
+    }
+
+    void test_readcsv(void) {
+        CSVReader *reader = new CSVReader();
+        const char* test_file_path = cut_build_fixture_path(".", "TESTCSV.csv", NULL);
+        cut_assert_equal_int(true, reader->open_path(test_file_path));
+
+        helper_test_readcsv(reader, false);
+    }
+
+    void test_readcsv3(void) {
+        CSVReader *reader = new CSVReader();
+        const char* test_file_path = cut_build_fixture_path(".", "TESTCSV3.csv", NULL);
+        cut_assert_equal_int(true, reader->open_path(test_file_path));
+
+        helper_test_readcsv(reader, true);
     }
 
     void test_largecsv(void) {
@@ -214,4 +231,42 @@ namespace csv {
 
         cut_assert_equal_boolean(true, reader->eof());
     }
+
+    void test_largecsv4(void) {
+        CSVReader *reader = new CSVReader();
+        const char* test_file_path = cut_build_fixture_path(".", "LARGECSV4.csv", NULL);
+        cut_assert_equal_int(true, reader->open_path(test_file_path));
+
+        bool islinelast;
+        size_t readlen;
+        const char *column;
+
+        for (int i = 0; i < 1100; i++) {
+            column = reader->readnext(&readlen, &islinelast);
+            cut_assert_equal_memory("Column A", 8, column, readlen, cut_message("Line %d", i));
+            cut_assert_equal_int(false, islinelast, cut_message("Line %d", i));
+
+            column = reader->readnext(&readlen, &islinelast);
+            cut_assert_equal_memory("Column B\r\nMulti line!\r\n", 23, column, readlen,
+                                    cut_message("Line %d", i));
+            cut_assert_equal_int(false, islinelast, cut_message("Line %d", i));
+            cut_assert_equal_boolean(false, reader->eof());
+
+            column = reader->readnext(&readlen, &islinelast);
+            cut_assert_equal_memory("Column C", 8, column, readlen, cut_message("Line %d", i));
+            cut_assert_equal_int(true, islinelast, cut_message("Line %d", i));
+        }
+        cut_assert_equal_boolean(true, reader->eof());
+
+        column = reader->readnext(&readlen, &islinelast);
+        if (column != NULL) {
+            char *str = strndup(column, readlen);
+            printf(":: %zu %s\n", readlen, str);
+        }
+
+        cut_assert_equal_pointer(NULL, column);
+
+        cut_assert_equal_boolean(true, reader->eof());
+    }
+
 }
