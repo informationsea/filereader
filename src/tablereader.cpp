@@ -89,6 +89,10 @@ const char* TableReader::readnext(size_t *readlen, bool *islinelast)
 
     *readlen -= 1; // do not include delimiter
 
+    // windows style new line
+    if (buf[*readlen-1] == '\r')
+        *readlen -= 1;
+
     if (lastchar == '\n')
         *islinelast = true;
     else
