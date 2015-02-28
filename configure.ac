@@ -38,7 +38,7 @@ PKG_CHECK_MODULES(zlib, zlib >= 0.28)
 AC_CHECK_HEADERS([fcntl.h string.h])
 
 # Checks for typedefs, structures, and compiler characteristics.
-AC_CHECK_HEADER_STDBOOL
+#AC_CHECK_HEADER_STDBOOL
 AC_TYPE_OFF_T
 AC_TYPE_SIZE_T
 
