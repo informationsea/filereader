@@ -1,84 +1,80 @@
-#include <cppcutter.h>
 #include <tablereader.hpp>
+#include "test_common.hpp"
 
-namespace table {
+TEST(TABLE, test_readtvs) {
+    TableReader *reader = new TableReader();
+    const char* test_file_path = "TESTTABLE.TVS";
+    ASSERT_TRUE(reader->open_path(test_file_path));
 
-    void test_readtvs(void) {
-        TableReader *reader = new TableReader();
-        const char* test_file_path = cut_build_fixture_path(".", "TESTTABLE.TVS", NULL);
-        cut_assert_equal_int(true, reader->open_path(test_file_path));
-
-        bool islinelast;
-        size_t readlen;
-        const char *column;
+    bool islinelast;
+    size_t readlen;
+    const char *column;
         
-        column = reader->readnext(&readlen, &islinelast);
-        cut_assert_equal_memory("Column1", 7, column, readlen);
-        cut_assert_equal_int(false, islinelast);
+    column = reader->readnext(&readlen, &islinelast);
+    ASSERT_MEMEQ("Column1", 7, column, readlen);
+    ASSERT_FALSE(islinelast);
 
-        column = reader->readnext(&readlen, &islinelast);
-        cut_assert_equal_memory("Column2", 7, column, readlen);
-        cut_assert_equal_int(false, islinelast);
+    column = reader->readnext(&readlen, &islinelast);
+    ASSERT_MEMEQ("Column2", 7, column, readlen);
+    ASSERT_FALSE(islinelast);
 
-        column = reader->readnext(&readlen, &islinelast);
-        cut_assert_equal_memory("Column3", 7, column, readlen);
-        cut_assert_equal_int(true, islinelast);
+    column = reader->readnext(&readlen, &islinelast);
+    ASSERT_MEMEQ("Column3", 7, column, readlen);
+    ASSERT_TRUE(islinelast);
 
-        column = reader->readnext(&readlen, &islinelast);
-        cut_assert_equal_memory("A", 1, column, readlen);
-        cut_assert_equal_int(false, islinelast);
+    column = reader->readnext(&readlen, &islinelast);
+    ASSERT_MEMEQ("A", 1, column, readlen);
+    ASSERT_FALSE(islinelast);
 
-        column = reader->readnext(&readlen, &islinelast);
-        cut_assert_equal_memory("B", 1, column, readlen);
-        cut_assert_equal_int(false, islinelast);
+    column = reader->readnext(&readlen, &islinelast);
+    ASSERT_MEMEQ("B", 1, column, readlen);
+    ASSERT_FALSE(islinelast);
 
-        column = reader->readnext(&readlen, &islinelast);
-        cut_assert_equal_memory("C", 1, column, readlen);
-        cut_assert_equal_int(true, islinelast);
+    column = reader->readnext(&readlen, &islinelast);
+    ASSERT_MEMEQ("C", 1, column, readlen);
+    ASSERT_TRUE(islinelast);
 
-        column = reader->readnext(&readlen, &islinelast);
-        cut_assert(NULL == column);
+    column = reader->readnext(&readlen, &islinelast);
+    ASSERT_EQ(NULL, column);
 
-        delete reader;
-    }
+    delete reader;
+}
     
-    void test_readtvs2(void) {
-        TableReader *reader = new TableReader();
-        const char* test_file_path = cut_build_fixture_path(".", "TESTTABLE2.TVS", NULL);
-        cut_assert_equal_int(true, reader->open_path(test_file_path));
+TEST(TABLE,readtvs2) {
+    TableReader *reader = new TableReader();
+    const char* test_file_path = "TESTTABLE2.TVS";
+    ASSERT_TRUE(reader->open_path(test_file_path));
 
-        bool islinelast;
-        size_t readlen;
-        const char *column;
+    bool islinelast;
+    size_t readlen;
+    const char *column;
         
-        column = reader->readnext(&readlen, &islinelast);
-        cut_assert_equal_memory("Column1", 7, column, readlen);
-        cut_assert_equal_int(false, islinelast);
+    column = reader->readnext(&readlen, &islinelast);
+    ASSERT_MEMEQ("Column1", 7, column, readlen);
+    ASSERT_FALSE(islinelast);
 
-        column = reader->readnext(&readlen, &islinelast);
-        cut_assert_equal_memory("Column2", 7, column, readlen);
-        cut_assert_equal_int(false, islinelast);
+    column = reader->readnext(&readlen, &islinelast);
+    ASSERT_MEMEQ("Column2", 7, column, readlen);
+    ASSERT_FALSE(islinelast);
 
-        column = reader->readnext(&readlen, &islinelast);
-        cut_assert_equal_memory("Column3", 7, column, readlen);
-        cut_assert_equal_int(true, islinelast);
+    column = reader->readnext(&readlen, &islinelast);
+    ASSERT_MEMEQ("Column3", 7, column, readlen);
+    ASSERT_TRUE(islinelast);
 
-        column = reader->readnext(&readlen, &islinelast);
-        cut_assert_equal_memory("A", 1, column, readlen);
-        cut_assert_equal_int(false, islinelast);
+    column = reader->readnext(&readlen, &islinelast);
+    ASSERT_MEMEQ("A", 1, column, readlen);
+    ASSERT_FALSE(islinelast);
 
-        column = reader->readnext(&readlen, &islinelast);
-        cut_assert_equal_memory("B", 1, column, readlen);
-        cut_assert_equal_int(false, islinelast);
+    column = reader->readnext(&readlen, &islinelast);
+    ASSERT_MEMEQ("B", 1, column, readlen);
+    ASSERT_FALSE(islinelast);
 
-        column = reader->readnext(&readlen, &islinelast);
-        cut_assert_equal_memory("C", 1, column, readlen);
-        cut_assert_equal_int(true, islinelast);
+    column = reader->readnext(&readlen, &islinelast);
+    ASSERT_MEMEQ("C", 1, column, readlen);
+    ASSERT_TRUE(islinelast);
 
-        column = reader->readnext(&readlen, &islinelast);
-        cut_assert(NULL == column);
+    column = reader->readnext(&readlen, &islinelast);
+    ASSERT_EQ(NULL, column);
 
-        delete reader;
-    }
-
+    delete reader;
 }
