@@ -46,5 +46,5 @@ AC_FUNC_REALLOC
 AC_FUNC_MMAP
 AC_CHECK_FUNCS([strerror strtol munmap strndup])
 
-AC_CONFIG_FILES([Makefile src/Makefile test/Makefile])
+AC_CONFIG_FILES([Makefile src/Makefile test/Makefile test/gtest/Makefile])
 AC_OUTPUT
