@@ -1,13 +1,9 @@
 #include <csvreader.hpp>
 #include <stdio.h>
 #include <string.h>
-#include "test_common.hpp"    
+#include "test_common.hpp"
 
-TEST(CSV,readcsv2) {
-    CSVReader *reader = new CSVReader();
-    const char* test_file_path = "TESTCSV2.csv";
-    ASSERT_TRUE(reader->open_path(test_file_path));
-
+void helper_test_readcsv2(CSVReader *reader, const char *returnCode) {
     bool islinelast;
     size_t readlen;
     const char *column;
@@ -30,24 +26,46 @@ TEST(CSV,readcsv2) {
     column = reader->readnext(&readlen, &islinelast);
     ASSERT_MEMEQ("is", 2, column, readlen);
     ASSERT_FALSE(islinelast);
-    ASSERT_EQ(10, reader->tell());
+    ASSERT_EQ(9+strlen(returnCode), reader->tell());
 
     column = reader->readnext(&readlen, &islinelast);
     ASSERT_MEMEQ("a", 1, column, readlen);
     ASSERT_FALSE(islinelast);
-    ASSERT_EQ(12, reader->tell());
+    ASSERT_EQ(11+strlen(returnCode), reader->tell());
 
     column = reader->readnext(&readlen, &islinelast);
     ASSERT_MEMEQ("pen", 3, column, readlen);
     ASSERT_TRUE(islinelast);
-    ASSERT_EQ(16, reader->tell());
+    ASSERT_EQ(15+strlen(returnCode), reader->tell());
 
     ASSERT_TRUE(reader->eof());
-        
+}
+
+TEST(CSV, readcsv2_unix) {
+    CSVReader *reader = new CSVReader();
+    const char* test_file_path = "TESTCSV2-unix.csv";
+    ASSERT_TRUE(reader->open_path(test_file_path));
+    helper_test_readcsv2(reader, "\n");
     delete reader;
 }
 
-void helper_test_readcsv(CSVReader *reader, bool windowsReturn) {
+TEST(CSV, readcsv2_dos) {
+    CSVReader *reader = new CSVReader();
+    const char* test_file_path = "TESTCSV2-dos.csv";
+    ASSERT_TRUE(reader->open_path(test_file_path));
+    helper_test_readcsv2(reader, "\r\n");
+    delete reader;
+}
+
+TEST(CSV, readcsv2_mac) {
+    CSVReader *reader = new CSVReader();
+    const char* test_file_path = "TESTCSV2-mac.csv";
+    ASSERT_TRUE(reader->open_path(test_file_path));
+    helper_test_readcsv2(reader, "\r");
+    delete reader;
+}
+
+void helper_test_readcsv(CSVReader *reader, const char *returnCode) {
     bool islinelast;
     size_t readlen;
     const char *column;
@@ -89,11 +107,9 @@ void helper_test_readcsv(CSVReader *reader, bool windowsReturn) {
     ASSERT_TRUE(islinelast);
 
     column = reader->readnext(&readlen, &islinelast);
-    if (!windowsReturn) {
-        ASSERT_MEMEQ("Multiple\rline\rcell", 18, column, readlen);
-    } else {
-        ASSERT_MEMEQ("Multiple\r\nline\r\ncell", 20, column, readlen);
-    }
+    char buf[256];
+    int len = snprintf(buf, sizeof(buf)-1, "Multiple%sline%scell", returnCode, returnCode);
+    ASSERT_MEMEQ(buf, len, column, readlen);
         
     ASSERT_FALSE(islinelast);
 
@@ -119,21 +135,30 @@ void helper_test_readcsv(CSVReader *reader, bool windowsReturn) {
     delete reader;
 }
 
-TEST(CSV, readcsv) {
+TEST(CSV, readcsv_mac) {
     CSVReader *reader = new CSVReader();
-    const char* test_file_path = "TESTCSV.csv";
+    const char* test_file_path = "TESTCSV-mac.csv";
     ASSERT_EQ(true, reader->open_path(test_file_path));
 
-    helper_test_readcsv(reader, false);
+    helper_test_readcsv(reader, "\r");
 }
 
-TEST(CSV, readcsv3) {
+TEST(CSV, readcsv_dos) {
     CSVReader *reader = new CSVReader();
-    const char* test_file_path = "TESTCSV3.csv";
+    const char* test_file_path = "TESTCSV-dos.csv";
     ASSERT_EQ(true, reader->open_path(test_file_path));
 
-    helper_test_readcsv(reader, true);
+    helper_test_readcsv(reader, "\r\n");
 }
+
+TEST(CSV, readcsv_unix) {
+    CSVReader *reader = new CSVReader();
+    const char* test_file_path = "TESTCSV-unix.csv";
+    ASSERT_EQ(true, reader->open_path(test_file_path));
+
+    helper_test_readcsv(reader, "\n");
+}
+
 
 TEST(CSV, largecsv) {
     CSVReader *reader = new CSVReader();
