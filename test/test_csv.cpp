@@ -159,29 +159,26 @@ TEST(CSV, readcsv_unix) {
     helper_test_readcsv(reader, "\n");
 }
 
-
-TEST(CSV, largecsv) {
-    CSVReader *reader = new CSVReader();
-    const char* test_file_path = "LARGECSV.csv";
-    ASSERT_EQ(true, reader->open_path(test_file_path));
-
+void helper_largecsv(CSVReader *reader, const char* newline) {
     bool islinelast;
     size_t readlen;
     const char *column;
 
-    for (int i = 0; i < 1100; i++) {
+    char buf[30];
+    snprintf(buf, sizeof(buf)-1, "o%sk", newline);
+    
+    for (int i = 0; i < 10250; i++) {
+        //fprintf(stderr, "line %d\n", i);
         column = reader->readnext(&readlen, &islinelast);
-        ASSERT_MEMEQ("Column A", 8, column, readlen);
-        ASSERT_EQ(false, islinelast) << "Line" << i;
+        ASSERT_EQ(2, readlen) << "Line" << i;
+        ASSERT_EQ(0, memcmp("12", column, 2)) << "Line " << i;
+        ASSERT_EQ(false, islinelast) << "Line " << i;
+        ASSERT_FALSE(reader->eof()) << "Line " << i;
 
         column = reader->readnext(&readlen, &islinelast);
-        ASSERT_MEMEQ("Column B\nMulti line!\n", 21, column, readlen);
-        ASSERT_EQ(false, islinelast);
-        ASSERT_FALSE(reader->eof());
-
-        column = reader->readnext(&readlen, &islinelast);
-        ASSERT_MEMEQ("Column C", 8, column, readlen);
-        ASSERT_EQ(true, islinelast);
+        ASSERT_EQ(3, readlen) << "Line " << i;
+        ASSERT_EQ(0, memcmp(buf, column, 3)) << "Line " << i;
+        ASSERT_EQ(true, islinelast) << "Line " << i;
     }
     ASSERT_TRUE(reader->eof());
 
@@ -196,87 +193,42 @@ TEST(CSV, largecsv) {
     ASSERT_TRUE(reader->eof());
 }
 
-TEST(CSV, largecsv2) {
+
+TEST(CSV, largecsv_unix) {
     CSVReader *reader = new CSVReader();
-    const char* test_file_path = "LARGECSV2.csv";
+    const char* test_file_path = "LARGECSV-unix.csv";
     ASSERT_EQ(true, reader->open_path(test_file_path));
-
-    bool islinelast;
-    size_t readlen;
-    const char *column;
-
-    for (int i = 0; i < 1000; i++) {
-        column = reader->readnext(&readlen, &islinelast);
-        ASSERT_MEMEQ("Column \" A", 10, column, readlen);
-        ASSERT_EQ(false, islinelast);
-        ASSERT_FALSE(reader->eof());
-
-        column = reader->readnext(&readlen, &islinelast);
-        ASSERT_MEMEQ("Multi line \"\"\rcolumn", 20, column, readlen);
-        ASSERT_EQ(true, islinelast);
-    }
-    ASSERT_TRUE(reader->eof());
-        
-    column = reader->readnext(&readlen, &islinelast);
-    ASSERT_EQ(NULL, column);
-
-    ASSERT_TRUE(reader->eof());
+    helper_largecsv(reader, "\n");
 }
 
-TEST(CSV,largecsv3) {
+TEST(CSV, largecsv_mac) {
     CSVReader *reader = new CSVReader();
-    const char* test_file_path = "LARGECSV3.csv";
+    const char* test_file_path = "LARGECSV-mac.csv";
     ASSERT_EQ(true, reader->open_path(test_file_path));
-
-    bool islinelast;
-    size_t readlen;
-    const char *column;
-
-    for (int i = 0; i < 2000; i++) {
-        column = reader->readnext(&readlen, &islinelast);
-        ASSERT_MEMEQ("1234567", 7, column, readlen);
-        ASSERT_EQ(false, islinelast);
-        ASSERT_FALSE(reader->eof());
-
-        column = reader->readnext(&readlen, &islinelast);
-        ASSERT_MEMEQ("ABCDEFG", 7, column, readlen);
-        ASSERT_EQ(false, islinelast);
-        ASSERT_FALSE(reader->eof());
-
-        column = reader->readnext(&readlen, &islinelast);
-        ASSERT_MEMEQ("abcdefg", 7, column, readlen);
-        ASSERT_EQ(true, islinelast);
-    }
-    ASSERT_TRUE(reader->eof());
-        
-    column = reader->readnext(&readlen, &islinelast);
-    ASSERT_EQ(NULL, column);
-
-    ASSERT_TRUE(reader->eof());
+    helper_largecsv(reader, "\r");
 }
 
-TEST(CSV, largecsv4) {
+
+TEST(CSV, largecsv_dos) {
     CSVReader *reader = new CSVReader();
-    const char* test_file_path = "LARGECSV4.csv";
+    const char* test_file_path = "LARGECSV-dos.csv";
     ASSERT_EQ(true, reader->open_path(test_file_path));
 
     bool islinelast;
     size_t readlen;
     const char *column;
 
-    for (int i = 0; i < 1100; i++) {
+    for (int i = 0; i < 10250; i++) {
         column = reader->readnext(&readlen, &islinelast);
-        ASSERT_MEMEQ("Column A", 8, column, readlen);
-        ASSERT_EQ(false, islinelast);
+        ASSERT_EQ(1, readlen) << "Line" << i;
+        ASSERT_EQ(0, memcmp("1", column, 1)) << "Line " << i << " " << column[0];
+        ASSERT_EQ(false, islinelast) << "Line " << i;
+        ASSERT_FALSE(reader->eof()) << "Line " << i;
 
         column = reader->readnext(&readlen, &islinelast);
-        ASSERT_MEMEQ("Column B\r\nMulti line!\r\n", 23, column, readlen);
-        ASSERT_EQ(false, islinelast);
-        ASSERT_FALSE(reader->eof());
-
-        column = reader->readnext(&readlen, &islinelast);
-        ASSERT_MEMEQ("Column C", 8, column, readlen);
-        ASSERT_EQ(true, islinelast);
+        ASSERT_EQ(3, readlen) << "Line " << i;
+        ASSERT_EQ(0, memcmp("o\r\n", column, 3)) << "Line " << i;
+        ASSERT_EQ(true, islinelast) << "Line " << i;
     }
     ASSERT_TRUE(reader->eof());
 
@@ -290,3 +242,5 @@ TEST(CSV, largecsv4) {
 
     ASSERT_TRUE(reader->eof());
 }
+
+
