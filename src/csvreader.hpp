@@ -5,6 +5,15 @@
 #include "tablereader.hpp"
 #include "growbuffer.hpp"
 
+enum PARSER_STATE {
+    CSV_PARSER_INITIAL,
+    CSV_PARSER_IN_CELL,
+    CSV_PARSER_IN_QUOTE,
+    CSV_PARSER_ENDING_QUOTE,
+    CSV_PARSER_ENDING_LINE
+};
+
+
 class CSVReader : public TableReader
 {
 public:
@@ -19,9 +28,8 @@ protected:
     virtual bool open(FileReader *newfilreader);
     
 private:
-    char *m_buffer;
-    size_t m_bufferSize;
-    size_t m_bufferPoint;
+    GrowBuffer m_buffer;
+    enum PARSER_STATE m_state;
 };
 
 

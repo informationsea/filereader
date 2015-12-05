@@ -66,3 +66,15 @@ TEST(BUFFER, GROW3) {
         }
     }
 }
+
+TEST(BUFFER, GROW4) {
+    GrowBuffer buf;
+    ASSERT_EQ(GROWBUFFER_DEFAULT_SIZE, buf.reservedSize());
+    ASSERT_EQ(0, buf.size());
+
+    buf.append("test\"\"ok\"this", 14);
+    ASSERT_EQ(14, buf.size());
+    buf.normalizeQuote();
+    ASSERT_STREQ("test\"ok\"this", buf.data());
+}
+

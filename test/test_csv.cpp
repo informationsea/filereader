@@ -9,34 +9,34 @@ void helper_test_readcsv2(CSVReader *reader, const char *returnCode) {
     const char *column;
         
     column = reader->readnext(&readlen, &islinelast);
-    ASSERT_MEMEQ("This", 4, column, readlen);
+    ASSERT_STREQ("This", column);
     ASSERT_FALSE(islinelast);
     ASSERT_EQ(5, reader->tell());
 
     column = reader->readnext(&readlen, &islinelast);
-    ASSERT_MEMEQ("", 0, column, readlen);
+    ASSERT_STREQ("", column);
     ASSERT_FALSE(islinelast);
     ASSERT_EQ(6, reader->tell());
 
     column = reader->readnext(&readlen, &islinelast);
-    ASSERT_MEMEQ("", 0, column, readlen);
+    ASSERT_STREQ("", column);
     ASSERT_TRUE(islinelast);
     ASSERT_EQ(7, reader->tell());
 
     column = reader->readnext(&readlen, &islinelast);
-    ASSERT_MEMEQ("is", 2, column, readlen);
+    ASSERT_STREQ("is", column);
     ASSERT_FALSE(islinelast);
     ASSERT_EQ(9+strlen(returnCode), reader->tell());
 
     column = reader->readnext(&readlen, &islinelast);
-    ASSERT_MEMEQ("a", 1, column, readlen);
+    ASSERT_STREQ("a", column);
     ASSERT_FALSE(islinelast);
     ASSERT_EQ(11+strlen(returnCode), reader->tell());
 
     column = reader->readnext(&readlen, &islinelast);
-    ASSERT_MEMEQ("pen", 3, column, readlen);
+    ASSERT_STREQ("pen", column);
     ASSERT_TRUE(islinelast);
-    ASSERT_EQ(15+strlen(returnCode), reader->tell());
+    ASSERT_EQ(14+strlen(returnCode), reader->tell());
 
     ASSERT_TRUE(reader->eof());
 }
@@ -71,61 +71,48 @@ void helper_test_readcsv(CSVReader *reader, const char *returnCode) {
     const char *column;
         
     column = reader->readnext(&readlen, &islinelast);
-    ASSERT_MEMEQ("A", 1, column, readlen);
+    ASSERT_STREQ("A", column);
     ASSERT_FALSE(islinelast);
     ASSERT_EQ(2, reader->tell());
 
     column = reader->readnext(&readlen, &islinelast);
-    ASSERT_MEMEQ("B", 1, column, readlen);
+    ASSERT_STREQ("B", column);
     ASSERT_FALSE(islinelast);
     ASSERT_EQ(4, reader->tell());
 
     column = reader->readnext(&readlen, &islinelast);
-    ASSERT_MEMEQ("C", 1, column, readlen);
-    ASSERT_FALSE(islinelast);
+    ASSERT_STREQ("C", column);
     ASSERT_EQ(6, reader->tell());
 
     column = reader->readnext(&readlen, &islinelast);
-    ASSERT_MEMEQ("D", 1, column, readlen);
-    ASSERT_TRUE(islinelast);
+    ASSERT_STREQ("D", column);
     ASSERT_EQ(8, reader->tell());
 
     column = reader->readnext(&readlen, &islinelast);
-    ASSERT_MEMEQ("This is a pen.", 14, column, readlen);
-    ASSERT_FALSE(islinelast);
+    ASSERT_STREQ("This is a pen.", column);
 
     column = reader->readnext(&readlen, &islinelast);
-    ASSERT_MEMEQ("test b", 6, column, readlen);
-    ASSERT_FALSE(islinelast);
+    ASSERT_STREQ("test b", column);
 
     column = reader->readnext(&readlen, &islinelast);
-    ASSERT_MEMEQ("test \" c", 8, column, readlen);
-    ASSERT_FALSE(islinelast);
+    ASSERT_STREQ("test \" c", column);
 
     column = reader->readnext(&readlen, &islinelast);
-    ASSERT_MEMEQ("\"test d\"", 8, column, readlen);
-    ASSERT_TRUE(islinelast);
+    ASSERT_STREQ("\"test d\"", column);
 
     column = reader->readnext(&readlen, &islinelast);
     char buf[256];
     int len = snprintf(buf, sizeof(buf)-1, "Multiple%sline%scell", returnCode, returnCode);
-    ASSERT_MEMEQ(buf, len, column, readlen);
-        
-    ASSERT_FALSE(islinelast);
+    ASSERT_STREQ(buf, column);
 
     column = reader->readnext(&readlen, &islinelast);
-    ASSERT_MEMEQ("test b", 6, column, readlen);
-    ASSERT_FALSE(islinelast);
+    ASSERT_STREQ("test b", column);
 
     column = reader->readnext(&readlen, &islinelast);
-    ASSERT_MEMEQ("CSV", 3, column, readlen);
-    ASSERT_FALSE(islinelast);
+    ASSERT_STREQ("CSV", column);
 
     column = reader->readnext(&readlen, &islinelast);
-    ASSERT_MEMEQ("123", 3, column, readlen);
-    ASSERT_TRUE(islinelast);
-
-    ASSERT_TRUE(reader->eof());
+    ASSERT_STREQ("123", column);
 
     column = reader->readnext(&readlen, &islinelast);
     ASSERT_EQ(NULL, column);
@@ -170,14 +157,12 @@ void helper_largecsv(CSVReader *reader, const char* newline) {
     for (int i = 0; i < 10250; i++) {
         //fprintf(stderr, "line %d\n", i);
         column = reader->readnext(&readlen, &islinelast);
-        ASSERT_EQ(2, readlen) << "Line" << i;
-        ASSERT_EQ(0, memcmp("12", column, 2)) << "Line " << i;
+        ASSERT_STREQ("12", column) << "Line " << i;
         ASSERT_EQ(false, islinelast) << "Line " << i;
         ASSERT_FALSE(reader->eof()) << "Line " << i;
 
         column = reader->readnext(&readlen, &islinelast);
-        ASSERT_EQ(3, readlen) << "Line " << i << " " << column[0] << column[1] << column[2];
-        ASSERT_EQ(0, memcmp(buf, column, 3)) << "Line " << i;
+        ASSERT_STREQ(buf, column) << "Line " << i;
         ASSERT_EQ(true, islinelast) << "Line " << i;
     }
     ASSERT_TRUE(reader->eof());
@@ -188,7 +173,7 @@ void helper_largecsv(CSVReader *reader, const char* newline) {
         printf(":: %zu %s\n", readlen, str);
     }
 
-    ASSERT_EQ(NULL, column);
+    ASSERT_EQ(NULL, column) << column;
 
     ASSERT_TRUE(reader->eof());
 }
@@ -201,7 +186,7 @@ TEST(CSV, largecsv_unix) {
     helper_largecsv(reader, "\n");
 }
 
-#if 0
+#if 2
 
 TEST(CSV, largecsv_mac) {
     CSVReader *reader = new CSVReader();
@@ -222,17 +207,14 @@ TEST(CSV, largecsv_dos) {
 
     for (int i = 0; i < 10250; i++) {
         column = reader->readnext(&readlen, &islinelast);
-        ASSERT_EQ(1, readlen) << "Line" << i;
-        ASSERT_EQ(0, memcmp("1", column, 1)) << "Line " << i << " " << column[0];
+        ASSERT_STREQ("1", column) << "Line " << i;
         ASSERT_EQ(false, islinelast) << "Line " << i;
         ASSERT_FALSE(reader->eof()) << "Line " << i;
 
         column = reader->readnext(&readlen, &islinelast);
-        ASSERT_EQ(3, readlen) << "Line " << i;
-        ASSERT_EQ(0, memcmp("o\r\n", column, 3)) << "Line " << i;
+        ASSERT_STREQ("o\r\n", column) << "Line " << i;
         ASSERT_EQ(true, islinelast) << "Line " << i;
     }
-    ASSERT_TRUE(reader->eof());
 
     column = reader->readnext(&readlen, &islinelast);
     if (column != NULL) {

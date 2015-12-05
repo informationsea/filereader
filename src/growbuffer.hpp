@@ -32,7 +32,7 @@ public:
         return true;
     }
 
-    bool append(char* value, size_t len) {
+    bool append(const char* value, size_t len) {
         if (current + len >= bufferSize) {
             char *newbuffer = (char *)realloc(buffer, (((current + len)/GROWBUFFER_DEFAULT_SIZE) + 1)*GROWBUFFER_DEFAULT_SIZE);
             if (newbuffer == NULL)
@@ -59,6 +59,20 @@ public:
 
     size_t reservedSize() const {
         return bufferSize;
+    }
+
+    bool normalizeQuote() {
+        int diff = 0;
+
+        for (size_t src = 1; src < current; src++) {
+            if (buffer[src] == '"' && buffer[src-1] == '"') { // TODO: optimize here
+                diff += 1;
+            } else {
+                buffer[src - diff] = buffer[src];
+            }
+        }
+        current -= diff;
+        return true;
     }
 
     void clear() {
