@@ -3,3 +3,4 @@ test_filereader
 test_table
 *.log
 *.trs
+test_growbuffer
